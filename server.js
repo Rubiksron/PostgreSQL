@@ -5,9 +5,9 @@ const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
-const conString = 'postgres://postgres:serone@localhost:5432/postgres';
+const DATABASE_URL = 'postgres://postgres:serone@localhost:5432/postgres';
 const app = express();
-const client = new pg.Client(conString);
+const client = new pg.Client(DATABASE_URL);
 client.connect();
 client.on('error', error => {
   console.error(error);
