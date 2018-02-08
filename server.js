@@ -1,5 +1,5 @@
 'use strict';
-
+//REMEMBER TO SET .ENV OR AN EXPORT=DATABASE_URL IN TERMINAL WINDOW.
 const pg = require('pg');
 const fs = require('fs');
 const express = require('express');
@@ -15,11 +15,11 @@ client.on('error', error => {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static('./public'));
+app.use(express.static('./docs'));
 
 // REVIEW: These are routes for requesting HTML resources.
 app.get('/new', (request, response) => {
-  response.sendFile('new.html', {root: './public'});
+  response.sendFile('new.html', {root: './docs'});
 });
 
 // REVIEW: These are routes for making API calls to enact CRUD operations on our database.
@@ -163,7 +163,7 @@ app.listen(PORT, () => {
 
 // REVIEW: This helper function will load authors into the DB if the DB is empty.
 function loadAuthors() {
-  fs.readFile('./public/data/hackerIpsum.json', function(err, fd) {
+  fs.readFile('./docs/data/hackerIpsum.json', function(err, fd) {
     JSON.parse(fd.toString()).forEach(function(ele) {
       client.query(
         'INSERT INTO authors(author, "authorUrl") VALUES($1, $2) ON CONFLICT DO NOTHING',
@@ -178,7 +178,7 @@ function loadArticles() {
   client.query('SELECT COUNT(*) FROM articles')
     .then(result => {
       if(!parseInt(result.rows[0].count)) {
-        fs.readFile('./public/data/hackerIpsum.json', function(err, fd) {
+        fs.readFile('./docs/data/hackerIpsum.json', function(err, fd) {
           JSON.parse(fd.toString()).forEach(function(ele) {
             client.query(`
             INSERT INTO
